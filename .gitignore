@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# sqlite database
+*.db
+*.db-journal
+
+# auto-installed Prisma CLI agent reference docs
+/.agents/
+/.claude/
+/.windsurf/
+/skills-lock.json

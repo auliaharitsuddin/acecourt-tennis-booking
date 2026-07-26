@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Court {
+  id           String    @id @default(cuid())
+  number       Int       @unique
+  name         String
+  surface      String // "Hard Court", "Clay Court", "Grass Court"
+  indoor       Boolean   @default(false)
+  pricePerHour Int // in IDR
+  imageUrl     String
+  description  String
+  bookings     Booking[]
+
+  @@map("courts")
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  E_WALLET
+  CREDIT_CARD
+}
+
+model Booking {
+  id            String         @id @default(cuid())
+  courtId       String
+  court         Court          @relation(fields: [courtId], references: [id])
+  date          String // "yyyy-MM-dd"
+  startHour     Int // 6-21
+  durationHours Int // 1 or 2
+  customerName  String
+  customerPhone String
+  customerEmail String
+  notes         String?
+  totalPrice    Int
+  status        BookingStatus  @default(PENDING)
+  paymentMethod PaymentMethod?
+  createdAt     DateTime       @default(now())
+  paidAt        DateTime?
+
+  @@index([courtId, date])
+  @@map("bookings")
+}
