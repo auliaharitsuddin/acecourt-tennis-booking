@@ -3,6 +3,18 @@
 import { motion } from "motion/react";
 import { CalendarCheck, MapPin } from "lucide-react";
 
+// An irregular, non-repeating-looking path across the court so the ball
+// wanders and bounces around instead of just moving straight up and down.
+const BALL_LEFT = ["50%", "32%", "66%", "24%", "56%", "76%", "38%", "50%"];
+const BALL_TOP = ["18%", "34%", "26%", "52%", "70%", "44%", "24%", "18%"];
+const BALL_TIMES = [0, 0.14, 0.28, 0.42, 0.58, 0.72, 0.86, 1];
+// Shadow sits a touch below the ball and pulses smaller/fainter on the
+// "airborne" points to sell the illusion of height between bounces.
+const SHADOW_TOP = BALL_TOP.map((v) => `${parseFloat(v) + 5}%`);
+const SHADOW_SCALE = [1.15, 0.55, 1.15, 0.55, 1.15, 0.55, 1.15, 0.55];
+const SHADOW_OPACITY = [0.55, 0.16, 0.55, 0.16, 0.55, 0.16, 0.55, 0.16];
+const BALL_DURATION = 9;
+
 export function HeroVisual() {
   return (
     <motion.div
@@ -29,21 +41,40 @@ export function HeroVisual() {
         {/* Net */}
         <div className="absolute inset-x-10 top-1/2 h-8 -translate-y-1/2 rounded-sm border border-white/50 bg-white/10 backdrop-blur-sm" />
 
-        {/* Bouncing ball */}
+        {/* Ball shadow */}
         <motion.div
-          className="absolute left-1/2 size-9 -translate-x-1/2 rounded-full bg-lime shadow-lg shadow-black/20"
+          className="absolute h-3.5 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black blur-[2px]"
+          animate={{
+            left: BALL_LEFT,
+            top: SHADOW_TOP,
+            scale: SHADOW_SCALE,
+            opacity: SHADOW_OPACITY,
+          }}
+          transition={{
+            duration: BALL_DURATION,
+            repeat: Infinity,
+            ease: "easeInOut",
+            times: BALL_TIMES,
+          }}
+        />
+
+        {/* Wandering, bouncing ball */}
+        <motion.div
+          className="absolute size-9 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime shadow-lg shadow-black/20"
           style={{
             backgroundImage:
               "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.85), transparent 45%)",
           }}
           animate={{
-            top: ["18%", "72%", "18%"],
-            rotate: [0, 180, 360],
+            left: BALL_LEFT,
+            top: BALL_TOP,
+            rotate: [0, 140, 260, 380, 480, 610, 700, 800],
           }}
           transition={{
-            duration: 2.6,
+            duration: BALL_DURATION,
             repeat: Infinity,
             ease: "easeInOut",
+            times: BALL_TIMES,
           }}
         />
       </div>
