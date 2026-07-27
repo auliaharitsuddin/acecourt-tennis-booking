@@ -3,17 +3,21 @@
 import { motion } from "motion/react";
 import { CalendarCheck, MapPin } from "lucide-react";
 
-// An irregular, non-repeating-looking path across the court so the ball
-// wanders and bounces around instead of just moving straight up and down.
-const BALL_LEFT = ["50%", "32%", "66%", "24%", "56%", "76%", "38%", "50%"];
-const BALL_TOP = ["18%", "34%", "26%", "52%", "70%", "44%", "24%", "18%"];
-const BALL_TIMES = [0, 0.14, 0.28, 0.42, 0.58, 0.72, 0.86, 1];
-// Shadow sits a touch below the ball and pulses smaller/fainter on the
-// "airborne" points to sell the illusion of height between bounces.
+// A simulated rally: every point strictly alternates between the near
+// side (top > 50%, below the net) and the far side (top < 50%, above the
+// net), so each "shot" actually crosses the net like a real point being
+// played, instead of bouncing back and forth on the same side. The last
+// point repeats the first so the loop closes seamlessly.
+const BALL_LEFT = ["35%", "68%", "58%", "28%", "48%", "74%", "26%", "52%", "35%"];
+const BALL_TOP = ["78%", "20%", "70%", "22%", "80%", "18%", "72%", "26%", "78%"];
+const BALL_TIMES = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1];
+const BALL_ROTATE = [0, 135, 270, 405, 540, 675, 810, 945, 1080];
+// Shadow sits a touch below the ball and pulses smaller/fainter between
+// bounces to sell the illusion of height as the ball crosses the net.
 const SHADOW_TOP = BALL_TOP.map((v) => `${parseFloat(v) + 5}%`);
-const SHADOW_SCALE = [1.15, 0.55, 1.15, 0.55, 1.15, 0.55, 1.15, 0.55];
-const SHADOW_OPACITY = [0.55, 0.16, 0.55, 0.16, 0.55, 0.16, 0.55, 0.16];
-const BALL_DURATION = 9;
+const SHADOW_SCALE = [1.15, 0.55, 1.15, 0.55, 1.15, 0.55, 1.15, 0.55, 1.15];
+const SHADOW_OPACITY = [0.55, 0.16, 0.55, 0.16, 0.55, 0.16, 0.55, 0.16, 0.55];
+const BALL_DURATION = 10;
 
 export function HeroVisual() {
   return (
@@ -68,7 +72,7 @@ export function HeroVisual() {
           animate={{
             left: BALL_LEFT,
             top: BALL_TOP,
-            rotate: [0, 140, 260, 380, 480, 610, 700, 800],
+            rotate: BALL_ROTATE,
           }}
           transition={{
             duration: BALL_DURATION,
