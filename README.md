@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AceCourt
 
-## Getting Started
+A tennis court booking app. Browse six courts, pick a date and time slot, check out, and pay — all in one flow, backed by a real database.
 
-First, run the development server:
+**Live demo:** https://auliaharitsuddin.github.io/acecourt-tennis-booking/ (static build with seeded sample data — bookings and payments are simulated, nothing writes to a real server)
+
+## What it does
+
+AceCourt runs a full booking cycle for a tennis facility with six courts of different surfaces (hard, clay, grass) and settings (indoor, outdoor). A customer checks court availability by date, selects an open hour slot, fills in contact details, chooses a payment method, and gets a confirmed booking.
+
+## Features
+
+- **Court catalog** — six courts, each with its own surface type, price per hour, indoor/outdoor status, and description.
+- **Availability check** — slot picker shows which hours (6:00–22:00) are open for a chosen date and court, blocking hours already booked.
+- **Booking flow** — select date, start hour, and duration (1 or 2 hours), then enter customer name, phone, and email.
+- **Checkout** — review the booking summary and total price before confirming.
+- **Payment simulation** — choose bank transfer, e-wallet, or credit card; booking status moves from pending to paid.
+- **Booking management API** — REST endpoints to list courts, check availability, create a booking, fetch a booking by ID, and mark it paid.
+
+## Glossary
+
+- **Court** — a physical tennis court, identified by number, with its own surface and price.
+- **Slot** — a one-hour block of availability, from 6:00 to 22:00.
+- **Booking status** — `PENDING` (created, not yet paid), `PAID` (payment confirmed), or `CANCELLED`.
+
+## Running it
+
+Requires Node.js and npm.
 
 ```bash
+npm install
+npx prisma generate
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app starts on `http://localhost:3001`. `npm run db:seed` populates the SQLite database with the six sample courts.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+For a production build: `npm run build` then `npm run start`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech stack
 
-## Learn More
+Next.js, React, Prisma with a SQLite adapter, Tailwind CSS, and shadcn-based UI components.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Bahasa Indonesia
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Aplikasi pemesanan lapangan tenis. Jelajahi enam lapangan, pilih tanggal dan jam, lakukan checkout, dan bayar — semua dalam satu alur, dengan database sungguhan di baliknya.
 
-## Deploy on Vercel
+**Demo live:** https://auliaharitsuddin.github.io/acecourt-tennis-booking/ (versi statis dengan data contoh — booking dan pembayaran hanya simulasi, tidak ada yang tersimpan ke server nyata)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Fungsi
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+AceCourt menjalankan siklus pemesanan penuh untuk fasilitas tenis dengan enam lapangan berbeda permukaan (hard, clay, rumput) dan setting (indoor, outdoor). Pelanggan mengecek ketersediaan lapangan berdasarkan tanggal, memilih jam kosong, mengisi data kontak, memilih metode pembayaran, lalu mendapat booking terkonfirmasi.
+
+## Semua fitur
+
+- **Katalog lapangan** — enam lapangan, masing-masing dengan jenis permukaan, harga per jam, status indoor/outdoor, dan deskripsi sendiri.
+- **Cek ketersediaan** — pemilih slot menampilkan jam mana (6:00–22:00) yang kosong untuk tanggal dan lapangan yang dipilih, jam yang sudah dibooking otomatis terkunci.
+- **Alur booking** — pilih tanggal, jam mulai, dan durasi (1 atau 2 jam), lalu isi nama, telepon, dan email pelanggan.
+- **Checkout** — tinjau ringkasan booking dan total harga sebelum konfirmasi.
+- **Simulasi pembayaran** — pilih transfer bank, e-wallet, atau kartu kredit; status booking berubah dari pending ke paid.
+- **API manajemen booking** — endpoint REST untuk daftar lapangan, cek ketersediaan, buat booking, ambil booking berdasarkan ID, dan tandai lunas.
+
+## Istilah
+
+- **Court** — lapangan tenis fisik, diidentifikasi dengan nomor, punya permukaan dan harga sendiri.
+- **Slot** — blok ketersediaan satu jam, dari 6:00 sampai 22:00.
+- **Status booking** — `PENDING` (dibuat, belum dibayar), `PAID` (pembayaran terkonfirmasi), atau `CANCELLED`.
+
+## Cara menjalankan
+
+Butuh Node.js dan npm.
+
+```bash
+npm install
+npx prisma generate
+npm run db:seed
+npm run dev
+```
+
+Aplikasi berjalan di `http://localhost:3001`. `npm run db:seed` mengisi database SQLite dengan enam lapangan contoh.
+
+Untuk build produksi: `npm run build` lalu `npm run start`.
+
+## Tumpukan teknologi
+
+Next.js, React, Prisma dengan adapter SQLite, Tailwind CSS, dan komponen UI berbasis shadcn.
