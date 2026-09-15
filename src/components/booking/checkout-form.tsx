@@ -12,6 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FlowHeader } from "@/components/booking/flow-header";
 import { OrderSummary } from "@/components/booking/order-summary";
+import { STATIC_DEMO } from "@/lib/demo-data";
+import { saveDemoBooking } from "@/lib/demo-storage";
 
 type FieldErrors = Partial<Record<"customerName" | "customerPhone" | "customerEmail", string>>;
 
@@ -62,6 +64,28 @@ export function CheckoutForm({
 
     setSubmitting(true);
     try {
+      if (STATIC_DEMO) {
+        saveDemoBooking({
+          id: "demo",
+          courtId: court.id,
+          date,
+          startHour,
+          durationHours,
+          customerName: values.customerName,
+          customerPhone: values.customerPhone,
+          customerEmail: values.customerEmail,
+          notes: values.notes || null,
+          totalPrice: court.pricePerHour * durationHours,
+          status: "PENDING",
+          paymentMethod: null,
+          createdAt: new Date().toISOString(),
+          paidAt: null,
+        });
+        toast.info("Mode demo — booking ini tidak disimpan ke server.");
+        router.push("/booking/payment/demo");
+        return;
+      }
+
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { FlowHeader } from "@/components/booking/flow-header";
 import { OrderSummary } from "@/components/booking/order-summary";
 import { cn } from "@/lib/utils";
+import { STATIC_DEMO } from "@/lib/demo-data";
+import { loadDemoBooking, saveDemoBooking } from "@/lib/demo-storage";
 
 type PaymentMethod = "BANK_TRANSFER" | "E_WALLET" | "CREDIT_CARD";
 
@@ -54,6 +56,22 @@ export function PaymentForm({ booking }: { booking: Booking & { court: Court } }
     setProcessing(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 900));
+
+      if (STATIC_DEMO) {
+        const current = loadDemoBooking();
+        if (current) {
+          saveDemoBooking({
+            ...current,
+            status: "PAID",
+            paymentMethod: method,
+            paidAt: new Date().toISOString(),
+          });
+        }
+        toast.success("Mode demo — pembayaran disimulasikan, tidak ada transaksi nyata.");
+        router.push("/booking/success/demo");
+        return;
+      }
+
       const res = await fetch(`/api/bookings/${booking.id}/pay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

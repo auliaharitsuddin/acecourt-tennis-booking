@@ -12,6 +12,7 @@ import { DateStrip } from "@/components/booking/date-strip";
 import { TimeSlotGrid } from "@/components/booking/time-slot-grid";
 import { cn } from "@/lib/utils";
 import { formatCurrency, formatDateLabel, formatHourRange, toDateKey } from "@/lib/booking";
+import { STATIC_DEMO, getDemoAvailability } from "@/lib/demo-data";
 
 type AvailabilityBooking = { courtId: string; startHour: number; durationHours: number };
 
@@ -42,6 +43,11 @@ export function BookingFlow({
   }
 
   useEffect(() => {
+    if (STATIC_DEMO) {
+      setBookings(getDemoAvailability(selectedDate));
+      setLoading(false);
+      return;
+    }
     let active = true;
     fetch(`/api/availability?date=${selectedDate}`)
       .then((res) => res.json())

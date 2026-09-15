@@ -1,13 +1,23 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { CLOSE_HOUR, OPEN_HOUR } from "@/lib/booking";
 import { CheckoutForm } from "@/components/booking/checkout-form";
+import { DemoCheckoutGate } from "@/components/booking/demo-gates";
+import { STATIC_DEMO } from "@/lib/demo-data";
 
 export default async function CheckoutPage({
   searchParams,
 }: {
   searchParams: Promise<{ court?: string; date?: string; hour?: string; duration?: string }>;
 }) {
+  if (STATIC_DEMO) {
+    return (
+      <Suspense fallback={null}>
+        <DemoCheckoutGate />
+      </Suspense>
+    );
+  }
+
   const params = await searchParams;
   const courtId = params.court;
   const date = params.date;
@@ -26,7 +36,7 @@ export default async function CheckoutPage({
     redirect("/booking");
   }
 
-  const court = await prisma.court.findUnique({ where: { id: courtId } });
+  const court = await (await import("@/lib/prisma")).prisma.court.findUnique({ where: { id: courtId } });
   if (!court) {
     redirect("/booking");
   }
