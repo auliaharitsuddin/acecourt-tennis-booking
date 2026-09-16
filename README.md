@@ -16,6 +16,7 @@ AceCourt runs a full booking cycle for a tennis facility with six courts of diff
 - **Checkout** — review the booking summary and total price before confirming.
 - **Payment simulation** — choose bank transfer, e-wallet, or credit card; booking status moves from pending to paid.
 - **Booking management API** — REST endpoints to list courts, check availability, create a booking, fetch a booking by ID, and mark it paid.
+- **Indonesian/English language toggle** in the header (`src/lib/language.tsx`), persisted in `localStorage`.
 
 ## Glossary
 
@@ -62,6 +63,7 @@ AceCourt menjalankan siklus pemesanan penuh untuk fasilitas tenis dengan enam la
 - **Checkout** — tinjau ringkasan booking dan total harga sebelum konfirmasi.
 - **Simulasi pembayaran** — pilih transfer bank, e-wallet, atau kartu kredit; status booking berubah dari pending ke paid.
 - **API manajemen booking** — endpoint REST untuk daftar lapangan, cek ketersediaan, buat booking, ambil booking berdasarkan ID, dan tandai lunas.
+- **Toggle bahasa Indonesia/Inggris** di header (`src/lib/language.tsx`), tersimpan di `localStorage`.
 
 ## Istilah
 

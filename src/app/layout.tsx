@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Sora } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { LanguageProvider } from "@/lib/language";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,8 +36,10 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-background text-foreground"
         suppressHydrationWarning
       >
-        {children}
-        <Toaster richColors position="top-center" />
+        <LanguageProvider>
+          {children}
+          <Toaster richColors position="top-center" />
+        </LanguageProvider>
       </body>
     </html>
   );

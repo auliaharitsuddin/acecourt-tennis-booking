@@ -5,17 +5,20 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LangToggle } from "@/components/lang-toggle";
+import { useLanguage } from "@/lib/language";
 import { cn } from "@/lib/utils";
 
-const NAV_LINKS = [
-  { href: "/#lapangan", label: "Lapangan" },
-  { href: "/#cara-kerja", label: "Cara Kerja" },
-  { href: "/#kenapa-kami", label: "Kenapa Kami" },
-];
-
 export function SiteHeader() {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const NAV_LINKS = [
+    { href: "/#lapangan", label: t.header.nav.courts },
+    { href: "/#cara-kerja", label: t.header.nav.howItWorks },
+    { href: "/#kenapa-kami", label: t.header.nav.whyUs },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -54,30 +57,34 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          <LangToggle className="mr-1" />
           <Button
             variant="ghost"
             render={<Link href="tel:+622112345678" />}
             nativeButton={false}
           >
-            Hubungi Kami
+            {t.header.contact}
           </Button>
           <Button
             className="cursor-pointer"
             render={<Link href="/booking" />}
             nativeButton={false}
           >
-            Booking Sekarang
+            {t.header.bookNow}
           </Button>
         </div>
 
-        <button
-          type="button"
-          aria-label={mobileOpen ? "Tutup menu" : "Buka menu"}
-          onClick={() => setMobileOpen((v) => !v)}
-          className="flex size-10 items-center justify-center rounded-lg text-foreground md:hidden cursor-pointer"
-        >
-          {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LangToggle />
+          <button
+            type="button"
+            aria-label={mobileOpen ? t.header.closeMenu : t.header.openMenu}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="flex size-10 items-center justify-center rounded-lg text-foreground cursor-pointer"
+          >
+            {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -105,7 +112,7 @@ export function SiteHeader() {
                 render={<Link href="/booking" onClick={() => setMobileOpen(false)} />}
                 nativeButton={false}
               >
-                Booking Sekarang
+                {t.header.bookNow}
               </Button>
             </nav>
           </motion.div>
