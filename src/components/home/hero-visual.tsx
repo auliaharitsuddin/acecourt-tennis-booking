@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { CalendarCheck, MapPin } from "lucide-react";
 
@@ -20,6 +21,17 @@ const SHADOW_OPACITY = [0.55, 0.16, 0.55, 0.16, 0.55, 0.16, 0.55, 0.16, 0.55];
 const BALL_DURATION = 10;
 
 export function HeroVisual() {
+  const courtRef = useRef<HTMLDivElement>(null);
+  const [pointer, setPointer] = useState<{ left: string; top: string } | null>(null);
+
+  const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = courtRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setPointer({ left: `${x}%`, top: `${y}%` });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.92, y: 20 }}
@@ -28,7 +40,12 @@ export function HeroVisual() {
       className="relative mx-auto aspect-[4/5] w-full max-w-md"
     >
       {/* Court card */}
-      <div className="absolute inset-0 overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-to-b from-primary to-[#0f4c27] shadow-2xl shadow-primary/20">
+      <div
+        ref={courtRef}
+        onMouseMove={handlePointerMove}
+        onMouseLeave={() => setPointer(null)}
+        className="absolute inset-0 overflow-hidden rounded-[2rem] border border-border/60 bg-gradient-to-b from-primary to-[#0f4c27] shadow-2xl shadow-primary/20"
+      >
         <svg
           viewBox="0 0 400 500"
           className="absolute inset-0 h-full w-full opacity-90"
@@ -48,38 +65,35 @@ export function HeroVisual() {
         {/* Ball shadow */}
         <motion.div
           className="absolute h-3.5 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black blur-[2px]"
-          animate={{
-            left: BALL_LEFT,
-            top: SHADOW_TOP,
-            scale: SHADOW_SCALE,
-            opacity: SHADOW_OPACITY,
-          }}
-          transition={{
-            duration: BALL_DURATION,
-            repeat: Infinity,
-            ease: "easeInOut",
-            times: BALL_TIMES,
-          }}
+          animate={
+            pointer
+              ? { left: pointer.left, top: pointer.top, scale: 0.85, opacity: 0.35 }
+              : { left: BALL_LEFT, top: SHADOW_TOP, scale: SHADOW_SCALE, opacity: SHADOW_OPACITY }
+          }
+          transition={
+            pointer
+              ? { duration: 0.15, ease: "easeOut" }
+              : { duration: BALL_DURATION, repeat: Infinity, ease: "easeInOut", times: BALL_TIMES }
+          }
         />
 
-        {/* Wandering, bouncing ball */}
+        {/* Wandering, bouncing ball — follows the pointer on hover */}
         <motion.div
           className="absolute size-9 -translate-x-1/2 -translate-y-1/2 rounded-full bg-lime shadow-lg shadow-black/20"
           style={{
             backgroundImage:
               "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.85), transparent 45%)",
           }}
-          animate={{
-            left: BALL_LEFT,
-            top: BALL_TOP,
-            rotate: BALL_ROTATE,
-          }}
-          transition={{
-            duration: BALL_DURATION,
-            repeat: Infinity,
-            ease: "easeInOut",
-            times: BALL_TIMES,
-          }}
+          animate={
+            pointer
+              ? { left: pointer.left, top: pointer.top }
+              : { left: BALL_LEFT, top: BALL_TOP, rotate: BALL_ROTATE }
+          }
+          transition={
+            pointer
+              ? { duration: 0.15, ease: "easeOut" }
+              : { duration: BALL_DURATION, repeat: Infinity, ease: "easeInOut", times: BALL_TIMES }
+          }
         />
       </div>
 
